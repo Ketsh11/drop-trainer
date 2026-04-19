@@ -65,10 +65,6 @@ class DropTrainerOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (!config.enableDropTrainer())
-		{
-			return null;
-		}
 
 		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
 		if (inventory == null)
@@ -762,19 +758,39 @@ class DropTrainerOverlay extends Overlay
 		{
 			return "PERFECT EXECUTION";
 		}
+		if ("S+".equals(grade))
+		{
+			return "ABSURD PRECISION";
+		}
 		if ("S".equals(grade))
 		{
 			return "NEARLY ILLEGAL";
 		}
-		if ("A".equals(grade))
+		if ("A++".equals(grade))
 		{
-			return "FAST BUT HUMAN";
+			return "LASER FOCUSED";
 		}
-		if ("B".equals(grade))
+		if (grade.startsWith("A"))
 		{
-			return "MESSY SURVIVAL";
+			return "SHARP WORK";
 		}
-		return "TOTAL CARNAGE";
+		if (grade.startsWith("B"))
+		{
+			return "SOLID CHAOS";
+		}
+		if (grade.startsWith("C"))
+		{
+			return "HELD TOGETHER";
+		}
+		if (grade.startsWith("D"))
+		{
+			return "BARELY SURVIVED";
+		}
+		if (grade.startsWith("F"))
+		{
+			return "TOTAL CARNAGE";
+		}
+		return "DROP MADNESS";
 	}
 
 	private String getResultsGrade()
@@ -851,4 +867,8 @@ class DropTrainerOverlay extends Overlay
 		graphics.drawLine(start.x, start.y, end.x, end.y);
 	}
 }
+
+
+
+
 

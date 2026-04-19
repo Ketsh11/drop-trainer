@@ -152,11 +152,6 @@ public class DropTrainerPlugin extends Plugin
 
 	private void updateDropTrainerState()
 	{
-		if (!config.enableDropTrainer())
-		{
-			resetDropTrainer();
-			return;
-		}
 
 		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
 		if (inventory == null)
@@ -503,18 +498,11 @@ public class DropTrainerPlugin extends Plugin
 
 	String getCurrentDropTrainerGrade()
 	{
-		if (isCurrentDropTrainerPerfectRun())
-		{
-			return "S++";
-		}
-
 		return computeDropTrainerGrade(
 			dropTrainerScore,
 			dropTrainerDropCount,
 			dropTrainerPerfectHitCount,
-			dropTrainerMissCount,
-			getCurrentDropTrainerAverageMillis(),
-			dropTrainerSessionDifficulty);
+			dropTrainerMissCount);
 	}
 
 	String getLastSessionDropTrainerGrade()
@@ -523,40 +511,98 @@ public class DropTrainerPlugin extends Plugin
 			dropTrainerLastSessionScore,
 			dropTrainerLastSessionDrops,
 			dropTrainerLastSessionPerfectHitCount,
-			dropTrainerLastSessionMissCount,
-			(int) dropTrainerLastSessionAverageMillis,
-			dropTrainerLastSessionDifficulty);
+			dropTrainerLastSessionMissCount);
 	}
 
-	private String computeDropTrainerGrade(
-		int score,
-		int drops,
-		int perfectHits,
-		int misses,
-		int averageMillis,
-		DropTrainerDifficulty difficulty)
+	private String computeDropTrainerGrade(int score, int drops, int perfectHits, int misses)
 	{
+		if (drops <= 0 && misses <= 0)
+		{
+			return "C";
+		}
+
 		if (drops > 0 && misses == 0 && perfectHits == drops)
 		{
 			return "S++";
 		}
 
-		if (drops > 0 && misses == 0 && averageMillis <= difficulty.getSGradeAverageMillis() && score >= drops * 150)
+		double performance = computeDropTrainerPerformance(score, drops, misses);
+		if (misses == 0 && performance >= 14.75)
+		{
+			return "S+";
+		}
+		if (misses == 0 && performance >= 14.5)
 		{
 			return "S";
 		}
-
-		if (drops > 0 && misses <= 1 && averageMillis <= difficulty.getAGradeAverageMillis() && score >= drops * 85)
+		if (misses == 0 && performance >= 14.0)
+		{
+			return "A++";
+		}
+		if (performance >= 14.0)
+		{
+			return "A+";
+		}
+		if (performance >= 13.0)
 		{
 			return "A";
 		}
-
-		if (drops > 0 && misses <= 3 && score >= Math.max(300, drops * 35))
+		if (performance >= 12.0)
+		{
+			return "A-";
+		}
+		if (performance >= 11.0)
+		{
+			return "B+";
+		}
+		if (performance >= 10.0)
 		{
 			return "B";
 		}
+		if (performance >= 9.0)
+		{
+			return "B-";
+		}
+		if (performance >= 8.0)
+		{
+			return "C+";
+		}
+		if (performance >= 7.0)
+		{
+			return "C";
+		}
+		if (performance >= 6.0)
+		{
+			return "C-";
+		}
+		if (performance >= 5.0)
+		{
+			return "D+";
+		}
+		if (performance >= 4.0)
+		{
+			return "D";
+		}
+		if (performance >= 3.0)
+		{
+			return "D-";
+		}
+		if (performance >= 2.0)
+		{
+			return "F+";
+		}
+		if (performance >= 1.0)
+		{
+			return "F";
+		}
+		return "F-";
+	}
 
-		return "C";
+	private double computeDropTrainerPerformance(int score, int drops, int misses)
+	{
+		int attempts = Math.max(1, drops + misses);
+		double normalized = score / (attempts * 20.0);
+		return Math.max(0.0, Math.min(15.0, normalized));
 	}
 
 	private DropTrainerDifficulty getConfiguredDropTrainerDifficulty()
@@ -582,3 +628,6 @@ public class DropTrainerPlugin extends Plugin
 		return configManager.getConfig(DropTrainerConfig.class);
 	}
 }
+
+
+
