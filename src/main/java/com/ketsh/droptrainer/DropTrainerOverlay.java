@@ -708,10 +708,21 @@ class DropTrainerOverlay extends Overlay
 		float appear = Math.min(1f, age / 320f);
 		int alpha = Math.max(0, Math.min(255, Math.round(245 * fade)));
 		Rectangle inventoryBounds = getInventoryBoundsFallback();
-		int width = 236;
-		int height = 194;
-		int x = inventoryBounds.x - 26;
-		int y = inventoryBounds.y + 18;
+		int width = Math.max(214, inventoryBounds.width + 14);
+		int height = 188;
+		int x = inventoryBounds.x + (inventoryBounds.width - width) / 2;
+		int y = inventoryBounds.y + 22;
+		int leftPad = 16;
+		int statX = x + leftPad;
+		int titleY = y + 32;
+		int scoreY = y + 64;
+		int comboY = y + 87;
+		int perfectsY = y + 110;
+		int missesY = y + 133;
+		int avgY = y + 156;
+		int verdictY = y + 180;
+		int gradeX = x + width - 70;
+		int gradeY = y + 36;
 		int slamOffset = Math.round((1f - appear) * 28f);
 		double tilt = Math.sin(age / 85.0) * 0.02 * (1f - Math.min(1f, age / 900f));
 		AffineTransform oldTransform = graphics.getTransform();
@@ -725,7 +736,7 @@ class DropTrainerOverlay extends Overlay
 		graphics.setColor(new Color(255, 255, 255, Math.min(120, alpha / 2)));
 		for (int i = 0; i < 6; i++)
 		{
-			int stripeY = y + 14 + i * 24;
+			int stripeY = y + 14 + i * 23;
 			graphics.fillRect(x + 10, stripeY, width - 20, 5);
 		}
 		graphics.setColor(new Color(0, 0, 0, Math.min(255, alpha)));
@@ -736,17 +747,17 @@ class DropTrainerOverlay extends Overlay
 
 		Font originalFont = graphics.getFont();
 		Font titleFont = originalFont.deriveFont(Font.BOLD, 24f);
-		Font statFont = originalFont.deriveFont(Font.BOLD, 16f);
+		Font statFont = originalFont.deriveFont(Font.BOLD, 17f);
 		Font verdictFont = originalFont.deriveFont(Font.BOLD, 22f);
 
-		drawGifStyleText(graphics, getResultsGrade(), x + 156, y + 38, verdictFont.deriveFont(28f), alpha, 0.05f, 9);
-		drawGifStyleText(graphics, "DROP RAMPAGE", x + 18, y + 34, titleFont, alpha, -0.035f, 0);
-		drawGifStyleText(graphics, "SCORE " + plugin.getDropTrainerLastSessionScore(), x + 20, y + 68, statFont, alpha, 0f, 1);
-		drawGifStyleText(graphics, "MAX COMBO " + plugin.getDropTrainerLastSessionMaxCombo() + "X", x + 20, y + 92, statFont, alpha, 0f, 2);
-		drawGifStyleText(graphics, "PERFECTS " + plugin.getDropTrainerLastSessionPerfectHitCount() + "/" + plugin.getDropTrainerLastSessionDrops(), x + 20, y + 116, statFont, alpha, 0f, 3);
-		drawGifStyleText(graphics, "MISSES " + plugin.getDropTrainerLastSessionMissCount(), x + 20, y + 140, statFont, alpha, 0f, 4);
-		drawGifStyleText(graphics, "AVG " + plugin.getDropTrainerLastSessionAverageMillis() + "MS", x + 20, y + 164, statFont, alpha, 0f, 5);
-		drawGifStyleText(graphics, getResultsVerdict(), x + 18, y + 188, verdictFont, alpha, 0.02f, 6);
+		drawGifStyleText(graphics, getResultsGrade(), gradeX, gradeY, verdictFont.deriveFont(31f), alpha, 0.05f, 9);
+		drawGifStyleText(graphics, "DROP RAMPAGE", statX, titleY, titleFont, alpha, -0.035f, 0);
+		drawGifStyleText(graphics, "SCORE " + plugin.getDropTrainerLastSessionScore(), statX, scoreY, statFont, alpha, 0f, 1);
+		drawGifStyleText(graphics, "MAX COMBO " + plugin.getDropTrainerLastSessionMaxCombo() + "X", statX, comboY, statFont, alpha, 0f, 2);
+		drawGifStyleText(graphics, "PERFECTS " + plugin.getDropTrainerLastSessionPerfectHitCount() + "/" + plugin.getDropTrainerLastSessionDrops(), statX, perfectsY, statFont, alpha, 0f, 3);
+		drawGifStyleText(graphics, "MISSES " + plugin.getDropTrainerLastSessionMissCount(), statX, missesY, statFont, alpha, 0f, 4);
+		drawGifStyleText(graphics, "AVG " + plugin.getDropTrainerLastSessionAverageMillis() + "MS", statX, avgY, statFont, alpha, 0f, 5);
+		drawGifStyleText(graphics, getResultsVerdict(), statX, verdictY, verdictFont, alpha, 0.02f, 6);
 
 		graphics.setFont(originalFont);
 		graphics.setTransform(oldTransform);
