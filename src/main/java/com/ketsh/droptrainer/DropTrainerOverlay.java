@@ -475,7 +475,7 @@ class DropTrainerOverlay extends Overlay
 		String liveGrade = getLiveGrade();
 		FontMetrics gradeMetrics = graphics.getFontMetrics(gradeFont);
 		int gradeTextWidth = gradeMetrics.stringWidth(liveGrade);
-		int gradeTextX = hudX + hudWidth - gradeTextWidth - 14;
+		int gradeTextX = hudX + hudWidth - gradeTextWidth - 19;
 		int gradeCenterX = gradeTextX + gradeTextWidth / 2;
 		int topTextWidth = Math.max(24, gradeTextX - hudX - 16);
 		int bottomTextWidth = hudWidth - 20;
@@ -519,13 +519,13 @@ class DropTrainerOverlay extends Overlay
 			graphics,
 			liveGrade,
 			gradeTextX,
-			hudY + 42,
+			hudY + 47,
 			gradeFont,
 			235,
 			0.04f,
 			11);
 
-		drawHitSplash(graphics, gradeCenterX, hudY + 45);
+		drawHitSplash(graphics, gradeCenterX, hudY + 50);
 	}
 
 	private void drawDecayBar(Graphics2D graphics, int x, int y, int width, float progress, int potentialPoints)
