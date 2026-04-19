@@ -27,8 +27,8 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemComposition;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -85,7 +85,7 @@ class DropTrainerOverlay extends Overlay
 			return null;
 		}
 
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = client.getWidget(InterfaceID.INVENTORY, 0);
 		if (inventoryWidget == null || inventoryWidget.isHidden())
 		{
 			return null;
@@ -765,7 +765,7 @@ class DropTrainerOverlay extends Overlay
 
 	private Rectangle getInventoryBoundsFallback()
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = client.getWidget(InterfaceID.INVENTORY, 0);
 		if (inventoryWidget != null)
 		{
 			return inventoryWidget.getBounds();
