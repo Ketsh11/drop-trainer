@@ -457,9 +457,9 @@ class DropTrainerOverlay extends Overlay
 	{
 		Rectangle bounds = inventoryWidget.getBounds();
 		int hudX = bounds.x + 8;
-		int hudY = bounds.y - 68;
+		int hudY = bounds.y - 80;
 		int hudWidth = Math.max(110, bounds.width - 16);
-		int hudHeight = 62;
+		int hudHeight = 74;
 		int potentialPoints = plugin.getCurrentDropTrainerPotentialPoints();
 		long elapsedMillis = plugin.getCurrentDropTrainerElapsedMillis();
 		float decayProgress = plugin.getCurrentDropTrainerDecayProgress();
@@ -471,8 +471,15 @@ class DropTrainerOverlay extends Overlay
 		graphics.setColor(new Color(255, 255, 255, 60));
 		graphics.drawRoundRect(hudX, hudY, hudWidth, hudHeight, 16, 16);
 
-		int gradeAreaWidth = 78;
-		int textAreaWidth = hudWidth - gradeAreaWidth - 16;
+		Font gradeFont = graphics.getFont().deriveFont(Font.BOLD, 40f);
+		String liveGrade = getLiveGrade();
+		FontMetrics gradeMetrics = graphics.getFontMetrics(gradeFont);
+		int gradeTextWidth = gradeMetrics.stringWidth(liveGrade);
+		int gradeTextX = hudX + hudWidth - gradeTextWidth - 14;
+		int gradeCenterX = gradeTextX + gradeTextWidth / 2;
+		int topTextWidth = Math.max(24, gradeTextX - hudX - 16);
+		int bottomTextWidth = hudWidth - 20;
+
 		String scoreLine = "Score " + plugin.getDropTrainerScore();
 		String comboLine = plugin.getDropTrainerCombo() > 1 ? plugin.getDropTrainerCombo() + "x combo" : "combo ready";
 		if (plugin.getDropTrainerMissCount() > 0)
@@ -486,34 +493,39 @@ class DropTrainerOverlay extends Overlay
 		}
 		String timerLine = "NOW " + potentialPoints + "  " + elapsedMillis + "ms";
 		String hypeLine = getTimerHypeLine(potentialPoints);
+
+		java.awt.Shape oldClip = graphics.getClip();
+		graphics.setClip(new Rectangle(hudX + 8, hudY + 6, topTextWidth, 34));
 		graphics.setColor(Color.BLACK);
-		graphics.drawString(scoreLine, hudX + 11, hudY + 18);
-		graphics.drawString(comboLine, hudX + 11, hudY + 34);
-		graphics.drawString(timerLine, hudX + 11, hudY + 48);
-		graphics.drawString(hypeLine, hudX + 11, hudY + 62);
+		graphics.drawString(scoreLine, hudX + 11, hudY + 19);
+		graphics.drawString(comboLine, hudX + 11, hudY + 35);
 		graphics.setColor(Color.WHITE);
-		graphics.drawString(scoreLine, hudX + 10, hudY + 17);
+		graphics.drawString(scoreLine, hudX + 10, hudY + 18);
 		graphics.setColor(new Color(255, 214, 102, 255));
-		graphics.drawString(comboLine, hudX + 10, hudY + 33);
+		graphics.drawString(comboLine, hudX + 10, hudY + 34);
+		graphics.setClip(new Rectangle(hudX + 8, hudY + 38, bottomTextWidth, 26));
+		graphics.setColor(Color.BLACK);
+		graphics.drawString(timerLine, hudX + 11, hudY + 49);
+		graphics.drawString(hypeLine, hudX + 11, hudY + 61);
 		graphics.setColor(getPotentialPointColor(potentialPoints));
-		graphics.drawString(timerLine, hudX + 10, hudY + 47);
+		graphics.drawString(timerLine, hudX + 10, hudY + 48);
 		graphics.setColor(new Color(89, 255, 184, 255));
-		graphics.drawString(hypeLine, hudX + 10, hudY + 61);
+		graphics.drawString(hypeLine, hudX + 10, hudY + 60);
+		graphics.setClip(oldClip);
 
-		drawDecayBar(graphics, hudX + 10, hudY + hudHeight - 12, textAreaWidth, decayProgress, potentialPoints);
+		drawDecayBar(graphics, hudX + 10, hudY + 66, hudWidth - 20, decayProgress, potentialPoints);
 
-		int gradeCenterX = hudX + textAreaWidth + 18 + gradeAreaWidth / 2;
 		drawGifStyleText(
 			graphics,
-			getLiveGrade(),
-			gradeCenterX - 18,
-			hudY + 31,
-			graphics.getFont().deriveFont(Font.BOLD, 30f),
+			liveGrade,
+			gradeTextX,
+			hudY + 42,
+			gradeFont,
 			235,
 			0.04f,
 			11);
 
-		drawHitSplash(graphics, gradeCenterX, hudY + 38);
+		drawHitSplash(graphics, gradeCenterX, hudY + 45);
 	}
 
 	private void drawDecayBar(Graphics2D graphics, int x, int y, int width, float progress, int potentialPoints)
@@ -867,6 +879,13 @@ class DropTrainerOverlay extends Overlay
 		graphics.drawLine(start.x, start.y, end.x, end.y);
 	}
 }
+
+
+
+
+
+
+
 
 
 
