@@ -1,6 +1,6 @@
 package com.ketsh.droptrainer;
 
-enum DropTrainerDifficulty
+public enum DropTrainerDifficulty
 {
 	EASY("Easy", 460L, 720L, 1000L, 920L, 540, 760),
 	MEDIUM("Medium", 400L, 620L, 900L, 840L, 480, 690),
@@ -68,4 +68,5 @@ enum DropTrainerDifficulty
 		return displayName;
 	}
 }
+
 
